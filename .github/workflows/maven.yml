@@ -1,0 +1,48 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # Setup a MySQL service for our JUnit tests
+    services:
+      mysql:
+        image: mysql:8.0.33
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: social_media_app
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: maven
+
+      # Initialize the database schema before tests run
+      - name: Initialize Database
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot social_media_app < src/main/resources/db/schema.sql
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      # Optional: Run the JavaFX app (only builds, skips GUI launch in CI)
+      - name: Verify build success
+        run: echo "Build cleanly compiled and tests passed!"
