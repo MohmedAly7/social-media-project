@@ -1,0 +1,35 @@
+
+.label-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.label-subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.label-muted {
+    -fx-font-size: 10px;
+    -fx-text-fill: gray;
+}
+
+.label-small {
+    -fx-font-size: 11px;
+}
+
+.text-success {
+    -fx-text-fill: green;
+}
+
+.text-error {
+    -fx-text-fill: red;
+}
+
+.vbox-spacing {
+    -fx-spacing: 15;
+}
+
+.hbox-spacing {
+    -fx-spacing: 10;
+}

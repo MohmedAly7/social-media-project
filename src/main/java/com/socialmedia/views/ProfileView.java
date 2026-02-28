@@ -3,6 +3,7 @@ package com.socialmedia.views;
 import com.socialmedia.Main;
 import com.socialmedia.dao.ProfileDAO;
 import com.socialmedia.models.Profile;
+import com.socialmedia.utils.Constants;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public class ProfileView {
         ImageView imageView = new ImageView();
         imageView.setFitHeight(120);
         imageView.setFitWidth(120);
+        imageView.setPreserveRatio(true);
 
         Profile existingProfile = profileDAO.getProfile(Main.currentUser.getId());
 
@@ -49,6 +51,12 @@ public class ProfileView {
         TextArea bioArea = new TextArea(existingProfile != null ? existingProfile.getBio() : "");
         bioArea.setPromptText("Write something about yourself...");
         bioArea.setPrefRowCount(4);
+        final int maxBioLength = Constants.MAX_BIO_LENGTH;
+        bioArea.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > maxBioLength) {
+                bioArea.setText(newVal.substring(0, maxBioLength));
+            }
+        });
 
         if (existingProfile != null && existingProfile.getPictureUrl() != null
                 && !existingProfile.getPictureUrl().isEmpty()) {
@@ -101,7 +109,8 @@ public class ProfileView {
         vbox.getChildren().addAll(titleLabel, imageView, uploadBtn, picUrlField, bioArea, saveBtn, messageLabel,
                 backBtn);
 
-        Scene scene = new Scene(vbox, 400, 500);
+        Scene scene = new Scene(vbox, Constants.PROFILE_WINDOW_WIDTH, Constants.PROFILE_WINDOW_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
         stage.setTitle("Social Media App - Profile");
         stage.setScene(scene);
         stage.show();

@@ -3,6 +3,7 @@ package com.socialmedia.views;
 import com.socialmedia.Main;
 import com.socialmedia.dao.UserDAO;
 import com.socialmedia.models.User;
+import com.socialmedia.utils.Constants;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,7 +33,8 @@ public class AuthView {
 
         tabPane.getTabs().addAll(loginTab, registerTab);
 
-        Scene scene = new Scene(tabPane, 400, 350);
+        Scene scene = new Scene(tabPane, Constants.AUTH_WINDOW_WIDTH, Constants.AUTH_WINDOW_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
         stage.setTitle("Social Media App - Authentication");
         stage.setScene(scene);
         stage.show();
@@ -55,8 +57,8 @@ public class AuthView {
         Label messageLabel = new Label();
 
         loginBtn.setOnAction(e -> {
-            String email = emailField.getText();
-            String password = passwordField.getText();
+            String email = emailField.getText().trim();
+            String password = passwordField.getText().trim();
 
             User user = userDAO.loginUser(email, password);
             if (user != null) {
@@ -93,12 +95,22 @@ public class AuthView {
         Label messageLabel = new Label();
 
         registerBtn.setOnAction(e -> {
-            String name = nameField.getText();
-            String email = emailField.getText();
-            String password = passwordField.getText();
+            String name = nameField.getText().trim();
+            String email = emailField.getText().trim();
+            String password = passwordField.getText().trim();
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 messageLabel.setText("All fields are required!");
+                messageLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+            if (!email.contains("@") || !email.contains(".")) {
+                messageLabel.setText("Please enter a valid email address.");
+                messageLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+            if (password.length() < 6) {
+                messageLabel.setText("Password must be at least 6 characters.");
                 messageLabel.setStyle("-fx-text-fill: red;");
                 return;
             }

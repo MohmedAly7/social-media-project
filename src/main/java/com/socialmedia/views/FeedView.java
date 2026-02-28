@@ -7,6 +7,8 @@ import com.socialmedia.dao.PostDAO;
 import com.socialmedia.models.Comment;
 import com.socialmedia.models.Post;
 import com.socialmedia.structures.PostList;
+import com.socialmedia.utils.Constants;
+import com.socialmedia.utils.DateUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,7 +26,6 @@ public class FeedView {
     private PostDAO postDAO;
     private VBox feedBox;
     private int feedOffset = 0;
-    private static final int FEED_LIMIT = 5;
 
     public FeedView(Stage stage) {
         this.stage = stage;
@@ -72,19 +73,26 @@ public class FeedView {
         });
 
         Button postBtn = new Button("Post Update");
+        Label postMessageLabel = new Label();
         postBtn.setOnAction(e -> {
+            postMessageLabel.setText("");
             String content = postArea.getText().trim();
             String img = imageField.getText().trim();
             if (!content.isEmpty() || !img.isEmpty()) {
-                postDAO.createPost(Main.currentUser.getId(), content, img.isEmpty() ? null : img);
-                postArea.clear();
-                imageField.clear();
-                refreshFeed(true);
+                boolean success = postDAO.createPost(Main.currentUser.getId(), content, img.isEmpty() ? null : img);
+                if (success) {
+                    postArea.clear();
+                    imageField.clear();
+                    refreshFeed(true);
+                } else {
+                    postMessageLabel.setText("Failed to create post.");
+                    postMessageLabel.setStyle("-fx-text-fill: red;");
+                }
             }
         });
 
         HBox actions = new HBox(10, attachImageBtn, imageField, postBtn);
-        createPostBox.getChildren().addAll(postArea, actions);
+        createPostBox.getChildren().addAll(postArea, actions, postMessageLabel);
 
         // Feed display container
         ScrollPane scrollPane = new ScrollPane();
@@ -95,7 +103,7 @@ public class FeedView {
 
         Button loadMoreBtn = new Button("Load More Posts");
         loadMoreBtn.setOnAction(e -> {
-            feedOffset += FEED_LIMIT;
+            feedOffset += Constants.FEED_LIMIT;
             refreshFeed(false);
         });
 
@@ -103,7 +111,8 @@ public class FeedView {
 
         root.getChildren().addAll(headerBox, createPostBox, scrollPane, loadMoreBtn);
 
-        Scene scene = new Scene(root, 500, 650);
+        Scene scene = new Scene(root, Constants.FEED_WINDOW_WIDTH, Constants.FEED_WINDOW_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
         stage.setTitle("Social Media App - Feed");
         stage.setScene(scene);
         stage.show();
@@ -114,7 +123,7 @@ public class FeedView {
             feedBox.getChildren().clear();
             feedOffset = 0;
         }
-        PostList posts = postDAO.getFeedPosts(Main.currentUser.getId(), FEED_LIMIT, feedOffset);
+        PostList posts = postDAO.getFeedPosts(Main.currentUser.getId(), Constants.FEED_LIMIT, feedOffset);
 
         LikeDAO likeDAO = new LikeDAO();
         CommentDAO commentDAO = new CommentDAO();
@@ -126,7 +135,7 @@ public class FeedView {
 
             Label author = new Label(p.getAuthorName() != null ? p.getAuthorName() : "Unknown User");
             author.setStyle("-fx-font-weight: bold;");
-            Label time = new Label(p.getCreatedAt() != null ? p.getCreatedAt().toString() : "");
+            Label time = new Label(DateUtils.formatForDisplay(p.getCreatedAt()));
             time.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
 
             Label content = new Label(p.getContent() != null ? p.getContent() : "");

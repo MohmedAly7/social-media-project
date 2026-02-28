@@ -2,6 +2,7 @@ package com.socialmedia.views;
 
 import com.socialmedia.Main;
 import com.socialmedia.dao.FriendDAO;
+import com.socialmedia.utils.Constants;
 import com.socialmedia.db.DatabaseConnection;
 import com.socialmedia.models.User;
 import javafx.geometry.Insets;
@@ -89,7 +90,8 @@ public class FriendsView {
 
         root.getChildren().addAll(headerBox, searchBox, resultsBox, friendsLabel, myFriendsBox);
 
-        Scene scene = new Scene(root, 500, 600);
+        Scene scene = new Scene(root, Constants.FRIENDS_WINDOW_WIDTH, Constants.FRIENDS_WINDOW_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
         stage.setTitle("Social Media App - Friends");
         stage.setScene(scene);
         stage.show();

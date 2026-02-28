@@ -42,7 +42,7 @@ public class UserDAO {
                                 rs.getInt("id"),
                                 rs.getString("name"),
                                 rs.getString("email"),
-                                storedHash,
+                                null,
                                 rs.getTimestamp("created_at"));
                     }
                 }
