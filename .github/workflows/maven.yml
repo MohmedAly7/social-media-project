@@ -41,8 +41,25 @@ jobs:
           mysql -h 127.0.0.1 -P 3306 -u root -proot social_media_app < src/main/resources/db/schema.sql
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B clean package --file pom.xml
 
-      # Optional: Run the JavaFX app (only builds, skips GUI launch in CI)
       - name: Verify build success
         run: echo "Build cleanly compiled and tests passed!"
+
+      - name: Get current date for Release Tag
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_ENV
+
+      - name: Create Release and Upload JAR
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: release-${{ env.date }}
+          name: Social Media App Release ${{ env.date }}
+          draft: false
+          prerelease: false
+          files: |
+            target/social-media-app-1.0-SNAPSHOT.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
