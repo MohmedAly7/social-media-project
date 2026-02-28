@@ -1,6 +1,6 @@
 # Social Media Application
 
-A desktop-based social media application built using Java, JavaFX, and MySQL. It implements core object-oriented programming concepts, custom data structures, and database persistence.
+A desktop-based social media application built using Java, JavaFX, and MySQL. It implements core object-oriented programming concepts, custom data structures, and database persistence. 
 
 ## Features Included
 
