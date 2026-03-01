@@ -46,12 +46,16 @@ public class FeedView {
         profileBtn.setOnAction(e -> new ProfileView(stage).show());
         Button friendsBtn = new Button("Friends");
         friendsBtn.setOnAction(e -> new FriendsView(stage).show());
+        Button searchBtn = new Button("Search");
+        searchBtn.setOnAction(e -> new SearchView(stage).show());
+        Button notifBtn = new Button("Notifs");
+        notifBtn.setOnAction(e -> new NotificationView(stage).show());
         Button logoutBtn = new Button("Logout");
         logoutBtn.setOnAction(e -> {
             Main.currentUser = null;
             new AuthView(stage).show();
         });
-        headerBox.getChildren().addAll(titleLabel, profileBtn, friendsBtn, logoutBtn);
+        headerBox.getChildren().addAll(titleLabel, profileBtn, friendsBtn, searchBtn, notifBtn, logoutBtn);
 
         // Create Post Area
         VBox createPostBox = new VBox(10);

@@ -21,11 +21,12 @@ public class ProfileDAOTest {
         String picUrl = "http://example.com/pic.jpg";
 
         try {
-            boolean saved = profileDAO.saveOrUpdateProfile(testUserId, bio, picUrl);
+            boolean saved = profileDAO.saveOrUpdateProfile(testUserId, bio, picUrl, false);
             if (saved) {
                 Profile p = profileDAO.getProfile(testUserId);
                 assertNotNull(p);
                 assertEquals(bio, p.getBio());
+                assertFalse(p.isPrivate());
             }
         } catch (Exception e) {
             System.err.println(

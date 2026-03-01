@@ -52,4 +52,27 @@ public class UserDAO {
         }
         return null;
     }
+
+    public java.util.List<User> searchUsers(String query) {
+        java.util.List<User> users = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM users WHERE name LIKE ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "%" + query + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password_hash"),
+                            rs.getTimestamp("created_at")));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Search error: " + e.getMessage());
+        }
+        return users;
+    }
 }

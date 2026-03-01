@@ -84,6 +84,11 @@ public class ProfileView {
             }
         });
 
+        CheckBox privacyToggle = new CheckBox("Make Account Private (Friends Only)");
+        if (existingProfile != null) {
+            privacyToggle.setSelected(existingProfile.isPrivate());
+        }
+
         Button saveBtn = new Button("Save Profile");
         Label messageLabel = new Label();
 
@@ -91,7 +96,8 @@ public class ProfileView {
             boolean success = profileDAO.saveOrUpdateProfile(
                     Main.currentUser.getId(),
                     bioArea.getText(),
-                    picUrlField.getText());
+                    picUrlField.getText(),
+                    privacyToggle.isSelected());
             if (success) {
                 messageLabel.setText("Profile updated successfully!");
                 messageLabel.setStyle("-fx-text-fill: green;");
@@ -106,8 +112,8 @@ public class ProfileView {
             new FeedView(stage).show();
         });
 
-        vbox.getChildren().addAll(titleLabel, imageView, uploadBtn, picUrlField, bioArea, saveBtn, messageLabel,
-                backBtn);
+        vbox.getChildren().addAll(titleLabel, imageView, uploadBtn, picUrlField, bioArea, privacyToggle, saveBtn,
+                messageLabel, backBtn);
 
         Scene scene = new Scene(vbox, Constants.PROFILE_WINDOW_WIDTH, Constants.PROFILE_WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());

@@ -84,7 +84,12 @@ public class FriendsView {
             myFriendsBox.getChildren().add(new Label("No friends yet. Search and add some above."));
         } else {
             for (User f : list) {
-                myFriendsBox.getChildren().add(new Label("- " + f.getName() + " (" + f.getEmail() + ")"));
+                HBox friendRow = new HBox(10);
+                Label fLbl = new Label("- " + f.getName() + " (" + f.getEmail() + ")");
+                Button msgBtn = new Button("Message");
+                msgBtn.setOnAction(e -> new ChatView(stage, f).show());
+                friendRow.getChildren().addAll(fLbl, msgBtn);
+                myFriendsBox.getChildren().add(friendRow);
             }
         }
 

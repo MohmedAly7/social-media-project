@@ -22,7 +22,12 @@ public class FriendDAO {
 
             pstmt.setInt(1, minId);
             pstmt.setInt(2, maxId);
-            return pstmt.executeUpdate() > 0;
+            boolean success = pstmt.executeUpdate() > 0;
+            if (success) {
+                new NotificationDAO().createNotification(user1, "You are now friends!", "FRIEND");
+                new NotificationDAO().createNotification(user2, "You are now friends!", "FRIEND");
+            }
+            return success;
         } catch (SQLException e) {
             System.err.println("Database error adding friend: " + e.getMessage());
             return false;

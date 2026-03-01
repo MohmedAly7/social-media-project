@@ -22,6 +22,7 @@ public class ProfileDAO {
                             rs.getInt("user_id"),
                             rs.getString("bio"),
                             rs.getString("picture_url"),
+                            rs.getBoolean("is_private"),
                             rs.getTimestamp("updated_at"));
                 }
             }
@@ -31,17 +32,19 @@ public class ProfileDAO {
         return null;
     }
 
-    public boolean saveOrUpdateProfile(int userId, String bio, String pictureUrl) {
-        String sql = "INSERT INTO profiles (user_id, bio, picture_url) VALUES (?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE bio = ?, picture_url = ?";
+    public boolean saveOrUpdateProfile(int userId, String bio, String pictureUrl, boolean isPrivate) {
+        String sql = "INSERT INTO profiles (user_id, bio, picture_url, is_private) VALUES (?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE bio = ?, picture_url = ?, is_private = ?";
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, userId);
             pstmt.setString(2, bio);
             pstmt.setString(3, pictureUrl);
-            pstmt.setString(4, bio);
-            pstmt.setString(5, pictureUrl);
+            pstmt.setBoolean(4, isPrivate);
+            pstmt.setString(5, bio);
+            pstmt.setString(6, pictureUrl);
+            pstmt.setBoolean(7, isPrivate);
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;

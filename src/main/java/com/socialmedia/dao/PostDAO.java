@@ -33,11 +33,13 @@ public class PostDAO {
         PostList posts = new PostList();
         String sql = "SELECT p.*, u.name as author_name FROM posts p " +
                 "JOIN users u ON p.user_id = u.id " +
+                "LEFT JOIN profiles prof ON p.user_id = prof.user_id " +
                 "WHERE p.user_id = ? OR p.user_id IN (" +
                 "   SELECT user_id2 FROM friends WHERE user_id1 = ? AND status='ACCEPTED' " +
                 "   UNION " +
                 "   SELECT user_id1 FROM friends WHERE user_id2 = ? AND status='ACCEPTED'" +
                 ") " +
+                "OR prof.is_private = FALSE OR prof.is_private IS NULL " +
                 "ORDER BY p.created_at DESC LIMIT ? OFFSET ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -65,5 +67,20 @@ public class PostDAO {
             System.err.println("Database error fetching feed posts: " + e.getMessage());
         }
         return posts;
+    }
+
+    public int getPostOwnerId(int postId) {
+        String sql = "SELECT user_id FROM posts WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, postId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next())
+                    return rs.getInt("user_id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error fetching post owner: " + e.getMessage());
+        }
+        return -1;
     }
 }

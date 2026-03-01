@@ -6,15 +6,17 @@ public class Profile {
     private int userId;
     private String bio;
     private String pictureUrl;
+    private boolean isPrivate;
     private Timestamp updatedAt;
 
     public Profile() {
     }
 
-    public Profile(int userId, String bio, String pictureUrl, Timestamp updatedAt) {
+    public Profile(int userId, String bio, String pictureUrl, boolean isPrivate, Timestamp updatedAt) {
         this.userId = userId;
         this.bio = bio;
         this.pictureUrl = pictureUrl;
+        this.isPrivate = isPrivate;
         this.updatedAt = updatedAt;
     }
 
@@ -40,6 +42,14 @@ public class Profile {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
     }
 
     public Timestamp getUpdatedAt() {

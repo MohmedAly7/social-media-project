@@ -38,7 +38,15 @@ public class LikeDAO {
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, postId);
             pstmt.setInt(2, userId);
-            return pstmt.executeUpdate() > 0;
+            boolean success = pstmt.executeUpdate() > 0;
+            if (success) {
+                PostDAO postDAO = new PostDAO();
+                int ownerId = postDAO.getPostOwnerId(postId);
+                if (ownerId != -1 && ownerId != userId) {
+                    new NotificationDAO().createNotification(ownerId, "Someone liked your post!", "LIKE");
+                }
+            }
+            return success;
         } catch (SQLException e) {
             return false;
         }
