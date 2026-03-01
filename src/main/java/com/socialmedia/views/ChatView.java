@@ -9,8 +9,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class ChatView {
     private User chatPartner;
     private MessageDAO messageDAO;
     private VBox messageBox;
+    private Timeline timeline;
 
     public ChatView(Stage stage, User chatPartner) {
         this.stage = stage;
@@ -38,8 +42,16 @@ public class ChatView {
         HBox headerBox = new HBox(15);
         Label titleLabel = new Label("Chat with " + chatPartner.getName());
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2), ev -> refreshChat()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
         Button backBtn = new Button("Back to Friends");
-        backBtn.setOnAction(e -> new FriendsView(stage).show());
+        backBtn.setOnAction(e -> {
+            timeline.stop();
+            new FriendsView(stage).show();
+        });
         headerBox.getChildren().addAll(backBtn, titleLabel);
 
         ScrollPane scrollPane = new ScrollPane();
