@@ -12,6 +12,8 @@ import com.socialmedia.utils.DateUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -148,9 +150,23 @@ public class FeedView {
             postUI.getChildren().addAll(author, time, content);
 
             if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
-                Label imgLabel = new Label("[Attached Image: " + p.getImageUrl() + "]");
-                imgLabel.setStyle("-fx-text-fill: blue; -fx-font-size: 11px;");
-                postUI.getChildren().add(imgLabel);
+                try {
+                    ImageView imageView = new ImageView();
+                    imageView.setPreserveRatio(true);
+                    imageView.setSmooth(true);
+                    imageView.setCache(true);
+                    imageView.setFitWidth(Constants.FEED_IMAGE_MAX_WIDTH);
+                    imageView.getStyleClass().add("post-image");
+
+                    Image image = new Image(p.getImageUrl(), true);
+                    imageView.setImage(image);
+
+                    postUI.getChildren().add(imageView);
+                } catch (Exception ex) {
+                    Label imgErrorLabel = new Label("[Image failed to load]");
+                    imgErrorLabel.getStyleClass().addAll("label-small", "label-muted");
+                    postUI.getChildren().add(imgErrorLabel);
+                }
             }
 
             // Interaction section

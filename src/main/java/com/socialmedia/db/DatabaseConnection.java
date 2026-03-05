@@ -8,7 +8,7 @@ public class DatabaseConnection {
     // Hardcoded for development. Could be moved to properties file.
     private static final String URL = "jdbc:mysql://localhost:3306/social_media_app?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
-    private static final String PASSWORD = "root"; 
+    private static final String PASSWORD = ""; 
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

@@ -17,6 +17,8 @@ public final class Constants {
 
     // Feed
     public static final int FEED_LIMIT = 5;
+    public static final double FEED_IMAGE_MAX_WIDTH = 350.0;
+    public static final double FEED_IMAGE_MAX_HEIGHT = 350.0;
 
     // Profile
     public static final int MAX_BIO_LENGTH = 500;
