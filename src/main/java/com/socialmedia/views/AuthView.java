@@ -67,7 +67,7 @@ public class AuthView {
                 Main.currentUser = user;
                 new ProfileView(stage).show();
             } else {
-                messageLabel.setText("Invalid credentials!");
+                messageLabel.setText("Invalid credentials! or database connection error");
                 messageLabel.setStyle("-fx-text-fill: red;");
             }
         });
