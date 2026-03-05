@@ -6,11 +6,13 @@ A desktop-based social media application built using Java, JavaFX, and MySQL. It
 
 This project implements the following core features:
 1. **User Authentication:** Registration and secure login using hashed passwords.
-2. **Profile Management:** View and edit user profiles, bios, and profile pictures.
-3. **Posting Updates:** Create and store text or image posts via custom data structure management.
+2. **Profile Management & Privacy:** View and edit user profiles, bios, and profile pictures, with optional private account settings that restrict content visibility to friends.
+3. **Posting Updates:** Create and store text or image posts via custom data structure management, including inline image rendering in the feed.
 4. **News Feed:** View a unified feed of friends' posts using database pagination.
 5. **Likes & Comments:** Interact with posts by liking them or leaving comments.
-6. **Friend System:** Search for users and establish friend connections to populate your feed.
+6. **Friend System & Search:** Search for users and establish friend connections to populate your feed.
+7. **Notifications System:** Receive in-app notifications for friend requests, likes, comments, and other key events.
+8. **Real-Time Chat:** Exchange direct messages with friends through an integrated chat interface.
 
 ## Prerequisites and Requirements
 
