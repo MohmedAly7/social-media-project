@@ -18,6 +18,10 @@
     -fx-font-size: 11px;
 }
 
+.post-image {
+    -fx-padding: 5 0 0 0;
+}
+
 .text-success {
     -fx-text-fill: green;
 }
